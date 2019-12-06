@@ -1,0 +1,227 @@
+/* clean up old tables;
+   must drop tables with foreign keys first
+   due to referential integrity constraints
+ */
+
+
+DROP TABLE IF EXISTS Patient;
+DROP TABLE IF EXISTS Follow_up;
+
+
+create table Donor
+   (SSN	 		varchar(15)	NOT NULL,
+    name	 	varchar(100)	NOT NULL,
+    medical_history	varchar(200)	NOT NULL,
+    phone_number	varchar(15)	NOT NULL,
+    address 		varchar(100)	NOT NULL,
+    email_address 	varchar(50)	NOT NULL,
+    living_donor 	varchar(5)	NOT NULL,
+    deceased_donor 	varchar(5)	NOT NULL,
+    primary key(SSN))ENGINE=InnoDB;
+
+
+create table Failure
+   (Patient_ID_Number			varchar(100)	NOT NULL,
+    immunization_status 		varchar(100)	NOT NULL,
+    lab_result          		varchar(100)	NOT NULL,
+    graft_status        		varchar(100)	NOT NULL,
+    primary key(Patient_ID_Number))ENGINE=InnoDB;
+
+
+create table Hospital
+   (name 				varchar(100)	NOT NULL,
+    address 				varchar(60)	NOT NULL,
+    phone_number 			varchar(15)	NOT NULL,
+    number_of_transplants_per_year 	int(5)		NOT NULL,
+    primary key(name))ENGINE=InnoDB;
+
+
+create table Physician
+   (ID 				varchar(12)	NOT NULL,
+    years_of_experience 	int(10)		NOT NULL,
+    office_address 		varchar(100)	NOT NULL,
+    primary key(ID))ENGINE=InnoDB;
+
+
+create table Belong
+   (clinic_name 		varchar(100)	NOT NULL,
+    physician_name 		varchar(50)	NOT NULL,
+    primary key(physician_name, clinic_name))ENGINE=InnoDB;
+
+
+create table Patient
+   (SSN 		varchar(15)	NOT NULL,
+    name 		varchar(100)	NOT NULL,
+    blood_type 		varchar(20)	NOT NULL,
+    degree_of_urgency 	varchar(20)	NOT NULL,
+    transplant_date 	varchar(20)	NOT NULL,
+    email_address 	varchar(50)	NOT NULL,
+    physician_ID	varchar(12)	NOT NULL,
+    primary key(SSN),
+    foreign key(physician_ID) references Physician(ID))ENGINE=InnoDB;
+
+
+create table Follow_up
+   (immunization_status 	varchar(150)	NOT NULL,
+    lab_result 			varchar(30) 	NOT NULL,
+    graft_status 		varchar(30)	NOT NULL,
+    patient_ssn 		varchar(15)		NOT NULL,
+    hospital_name 		varchar(100)	NOT NULL,
+    primary key(immunization_status),
+    foreign key(hospital_name)	references Hospital(name),
+    foreign key(patient_SSN) 	references Patient(SSN))ENGINE=InnoDB;
+
+/* populate relations */
+
+insert into Donor	values	('404837542',	'Dolores Hughes',  'DIABETES MELLITUS ICD-250', 						'2372294252',	'9078 Wintergreen Avenue Acworth GA 30101', 	'dawson@gmail.com', 		'NO', 	'YES');
+insert into Donor	values 	('134906908',	'Gwendolyn Burns', 'HYPERTENSION BENIGN ESSENTIAL ICD-401', 					'6198176064', 	'782 Union Drive Hartselle AL 35640', 		'mwilson@gmail.com',		'NO', 	'YES');
+insert into Donor	values	('880381574',	'Raymond Clark',   'HYPERPLASIA PROSTATE ICD-600',						'4837404881',	'5 University Street Southington CT 06489',	'galbra@optonline.net',		'YES',	'NO');
+insert into Donor	values	('150592488',	'Susie Benson',	   'Disorders of muscle in diseases classified elsewhere and upper arm M63.82',	'7811668395',	'9933 Rockaway St. Baltimore MD 21206',		'jtorkbob@optonline.net',	'NO',	'YES');
+insert into Donor	values	('658125206',	'Brenda Munoz',	   'Graft-versus-host disease D89.81', 						'5541903675',	'69 8th Drive Elizabeth NJ 07202',		'sfoskett@icloud.com',		'YES',	'NO');
+insert into Donor	values	('276207923',	'Angelo Fernandez','Secondary malignant neoplasm of brain C79',					'6296107828',	'20 Edgewood Avenue Alliance OH 44601',		'murty@att.net',		'YES',	'NO');
+insert into Donor	values	('500070742',	'Glen Burton',	   'RETINOPATHY DIABETIC ICD-362',						'4652781312',	'482 Marconi Dr Waynesboro PA 17268',		'mjewell@msn.com',		'NO',	'YES');
+insert into Donor	values	('776680905',	'Herbert Hudson',  'Carrier of bacterial disease due to streptococci Z22',			'5451606239',	'864 Manor Lane New Castle PA 16101',		'seurat@att.net',		'NO',	'YES');
+insert into Donor	values	('392344325',	'Harry Hamilton',  'POLYNEUROPATHY IN DIABETES ICD-357',					'2085746602',	'47 Newbridge Court Olive Branch MS 38654',	'kenja@att.net',		'YES',	'NO');
+insert into Donor	values	('393866524',	'Dewey Warren',    'Neoplasm of uncertain behavior of parathyroid gland D44',			'7860101867',	'8272 Wagon Drive Benton Harbor MI 49022',	'crowemojo@msn.com',		'NO',	'YES');
+insert into Donor	values	('876934584',	'Cornelius Duncan','Cranial nerve disorders in diseases classified elsewhere M12',		'5375780636',	'439 Riverside Court Downers Grove IL 60515',	'lbaxter@comcast.net',		'NO',	'YES');
+insert into Donor	values	('468538818',	'Dexter Boyd',	   'Nerve root and plexus compressions in diseases classified elsewhere C38',	'9840179667',	'137 Pacific Ave Utica NY 13501',		'ilial@me.com',			'YES',	'NO');
+insert into Donor	values	('611911818',	'Grant Wright',	   'Rheumatoid vasculitis with rheumatoid arthritis of left hip E08',		'2575237705',	'9889 Sugar Dr Lilburn GA 30047',		'kludge@yahoo.com',		'YES',	'NO');
+insert into Donor	values	('325916399',	'Delores Aguilar', 'Megaesophagus in Chagas disease B57',					'7142614037',	'8689 Fulton Dr King Of Prussia PA 19406',	'skythe@att.net',		'YES',	'NO');
+insert into Donor	values	('572546440',	'Terrell Young',   'Rheumatoid nodule right elbow Z11.0',					'7701507866',	'9715 South Lilac Drive Garden City NY 11530',	'ghaviv@live.com',		'NO',	'YES');
+insert into Donor	values	('747009143',	'Kevin Garner',	   'Cyclothymic disorder C09.0',						'4587371129',	'40 East Wrangler Avenue Oshkosh WI 54901',	'dcoppit@hotmail.com',		'YES',	'NO');
+insert into Donor	values	('312911138',	'Wendy Underwood', 'Neoplasm of uncertain behavior of left kidney M24.232',			'8104275702',	'30 Roehampton Dr Sykesville MD 21784',		'mbalazin@hotmail.com',		'YES',	'NO');
+insert into Donor	values	('761662202',	'Willis Chavez',   'Acute pulmonary manifestations due to radiation J70',			'5772859069',	'9580 West Center Street Norman OK 73072',	'nacho@gmail.com',		'NO',	'YES');
+insert into Donor	values	('587984427',	'Roland Lyons',	   'Malignant neoplasm of upper lobe right bronchus or lung D31',		'9765848424',	'47 Wrangler Lane New Rochelle NY 10801',	'jacks@gmail.com',		'NO',	'YES');
+insert into Donor	values	('990917092',	'Jean Reeves',	   'Disorders of autonomic nervous system D48',					'2253536792',	'80 Selby Street Glasgow KY 42141',		'rgiersig@msn.com',		'YES',	'NO');
+
+
+insert into Failure	values	('9236224400',	'Red',		'Failed',		'Unsuccessful');
+insert into Failure	values	('9966611857',	'Orange',	'Passed',		'Successful');
+insert into Failure	values	('9705701251',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('3373725742',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('5712514309',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('9150258219',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('4449586393',	'Red',		'Failed',		'Unsuccessful');
+insert into Failure	values	('2923798796',	'Orange',	'Failed',		'Unsuccessful');
+insert into Failure	values	('3621696858',	'Orange',	'Failed',		'Unsuccessful');
+insert into Failure	values	('0509323745',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('4746950039',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('1043591286',	'Red',		'Failed',		'Unsuccessful');
+insert into Failure	values	('8768492921',	'Orange',	'Passed',		'Successful');
+insert into Failure	values	('2402721995',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('2222286553',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('1928381876',	'Red',		'Failed',		'Unsuccessful');
+insert into Failure	values	('3387517550',	'Orange',	'Passed',		'Successful');
+insert into Failure	values	('8428582157',	'Green',	'Passed',		'Successful');
+insert into Failure	values	('4048400897',	'Orange',	'Failed',		'Unsuccessful');
+insert into Failure	values	('8096431175',	'Green',	'Passed',		'Successful');
+
+
+insert into Hospital	values	('Boston Childrens Hospital',						'300 Longwood Avenue Boston Massachusetts 2115',		'501-364-2760',	'200');
+insert into Hospital	values	('Childrens Health Care of Atlanta at Egleston Hospital',		'Atlanta Georgia 30329',					'617-355-5862',	'164');
+insert into Hospital	values	('Childrens Hospital Colorado',						'13123 E 16th Ave Box B198  Aurora Colorado  80045',		'404-785-6453',	'133');
+insert into Hospital	values	('Childrens Hospital Medical Center of Akron', 				'One Perkins Square Akron Ohio 44308',				'720-777-8864',	'182');
+insert into Hospital	values	('Driscoll Childrens Hospital',						'3533 S Alameda Street Corpus Christi Texas 78411',		'512-324-9999',	'171');
+insert into Hospital	values	('Massachusetts General Hospital',					'125 Nashua St 8th floor Boston MA 21140',			'617-643-9445',	'183');
+insert into Hospital	values	('Nationwide Childrens Hospital',					'700 CHILDRENS DRIVE Columbus Ohio 43205',			'614-722-2650',	'170');
+insert into Hospital	values	('Rady Childrens Hospital',						'3020 Childrens Way San Diego California 92123',		'321-841-3687',	'149');
+insert into Hospital	values	('Riley Hospital for Children at IU Health',				'705 Riley Hospital Drive Indianapolis Indiana 46202',		'858-966-5910',	'141');
+insert into Hospital	values	('Texas Childrens Hospital',						'1102 Bates Avenue Suite 1480  Houston Texas 77030',		'613-936-6086', '175');
+insert into Hospital	values	('The Childrens Hospital at Montefiore',				'1300 Morris Park Ave Bronx New York 10461',			'832-824-1553',	'177');
+insert into Hospital	values	('UF Health Shands Childrens Hospital',					'1701 SW 16th Avenue 2303  Gainesville Florida 32608',		'310-206-4479',	'174');
+insert into Hospital	values	('University Hospitals Cleveland Rainbow Babies Childrens',		'11100 Euclid Avenue Lakeside 1400 Cleveland Ohio 44106',	'352-627-9322',	'197');
+insert into Hospital	values	('University of Iowa Stead Family Childrens Hospital',			'200 Hawkins Drive Iowa City Iowa 52242',			'216-286-0765',	'184');
+insert into Hospital	values	('University of Louisville Norton Childrens Hospital',			'KCPCRU 231 East Chestut Street 2 Louisville Kentucky 40202',	'319-678-8571',	'186');
+insert into Hospital	values	('University of Michigan',						'205 Zina Pitcher Place Ann Arbor Michigan 48109',		'502-629-5606',	'166');
+insert into Hospital	values	('University of Minnesota Masonic Childrens Hospital',			'Suite 535 606 24th Avenue South Minneapolis Minnesota 55455',	'734-998-9979',	'140');
+insert into Hospital	values	('University of New Mexico Health Sciences Center',			'1 University of New Mexico Albuquerque New Mexico 87131',	'612-625-4443',	'163');
+insert into Hospital	values	('University of Utah Clinical Trials Office',				'295 Chipeta Way Salt Lake City Utah 84108',			'801-213-4043',	'159');
+insert into Hospital	values	('White Willow General Hospital',					'808 Bradford Street Harvey IL 60426',				'309-212-2040',	'119');
+
+
+insert into Physician	values ('2U9C2WQ4L',	'12',	'98 East Cemetery Dr Cookeville TN 38501');
+insert into Physician	values ('92NBE9MMA',	'24',	'9883 Pearl Street Pewaukee WI 53072');
+insert into Physician	values ('1S022U5JJ',	'8',	'7628 Sherman Road Lilburn GA 30047');
+insert into Physician	values ('VHNHQ4KDH',	'30',	'13 NW Selby Ave Bozeman MT 59715');
+insert into Physician	values ('TPNNEA5BY',	'6',	'97 Green Hill Drive Hanover Park IL 60133');
+insert into Physician	values ('HMCOU02AO',	'3',	'995 Durham St Perrysburg OH 43551');
+insert into Physician	values ('BXHEW9V0E',	'12',	'7890 Bow Ridge Drive Randolph, MA 02368');
+insert into Physician	values ('H7UXQYJLO',	'5',	'8415 Fairfield Drive Easton PA 18042');
+insert into Physician	values ('L7KGB33WD',	'27',	'12 East Grandrose Street Saugus MA 01906');
+insert into Physician	values ('S2X0WOP5X',	'16',	'168 Branch Avenue Navarre FL 32566');
+insert into Physician	values ('MX8P1DWO2',	'20',	'330 John Drive Fair Lawn NJ 07410');
+insert into Physician	values ('233WPE0TG',	'6',	'9441 Brickyard Street Waynesboro PA 17268');
+insert into Physician	values ('DQW6YMD52',	'5',	'5 Hall Street Corona NY 11368');
+insert into Physician	values ('DB2KRWF1M',	'12',	'701 Fulton Avenue Buffalo Grove IL 60089');
+insert into Physician	values ('BI8G4ND4K',	'11',	'9523 Dunbar Street Hattiesburg MS 39401');
+insert into Physician	values ('PFTWQJ1PS',	'28',	'12 Wild Rose Street Ogden, UT 84404');
+insert into Physician	values ('OUQOX6IA3',	'4',	'83 West Forest Avenue Suitland MD 20746');
+insert into Physician	values ('TXRZV0T06',	'15',	'677 Greystone Street Sioux City IA 51106');
+insert into Physician	values ('UMJMUUZJD',	'1',	'7961 2nd Lane Clover SC 29710');
+insert into Physician	values ('DQ8CZWQBB',	'18',	'209 Gainsway Drive Gallatin TN 37066');
+
+
+insert into Belong	values ('Boston Childrens Hospital',			'Marcia Allison');
+insert into Belong	values ('Childrens Health Care of Atlanta',		'Hope Alexander');
+insert into Belong	values ('Childrens Hospital Colorado',			'Lorene Rios');
+insert into Belong	values ('Childrens Hospital Medical Center of Akron',  	'Clinton Simmons');
+insert into Belong	values ('Driscoll Childrens Hospital',			'Brandy Powell');
+insert into Belong	values ('Massachusetts General Hospital',		'Brandon Perez');
+insert into Belong	values ('Nationwide Childrens Hospital',		'Loren Mccormick');
+insert into Belong	values ('Rady Childrens Hospital',			'Katrina Craig');
+insert into Belong	values ('Riley Hospital for Children at IU Health',	'Colin Patrick');
+insert into Belong	values ('Texas Childrens Hospital',			'Wesley White');
+insert into Belong	values ('The Childrens Hospital at Montefiore',		'Roosevelt Hale');
+insert into Belong	values ('UF Health Shands Childrens Hospital',		'Martha Huff');
+insert into Belong	values ('University Hospitals Cleveland Childrens',	'Tammy Beck');
+insert into Belong	values ('University of Iowa Stead Family Childrens',	'Brian George');
+insert into Belong	values ('University of Louisville Norton Childrens', 	'Alyssa Mcguire');
+insert into Belong	values ('University of Michigan',			'Ruben Salazar');
+insert into Belong	values ('University of Minnesota Masonic Childrens',	'Chad Reyes');
+insert into Belong	values ('University of New Mexico Health Center',	'Alexis Higgins');
+insert into Belong	values ('University of Utah Clinical Trials Office',	'Clara Rose');
+
+
+insert into Patient	values ('528-94-8057',	'Blanche Hall',		'A-',	'High',		'6/17/2005',	'martyloo@verizon.net',	'2U9C2WQ4L');
+insert into Patient	values ('307-03-5688',	'Ian Glover',		'O+',	'High',		'8/19/2005',	'gamma@me.com',		'92NBE9MMA');
+insert into Patient	values ('534-62-1476',	'Terry Meyer',		'A-',	'High',		'11/2/2005',	'wilsonpm@yahoo.com',	'1S022U5JJ');
+insert into Patient	values ('366-36-1212',	'Zachary Nash',		'O+',	'Not Urgent',	'5/17/2007',	'skythe@comcast.net',	'VHNHQ4KDH');
+insert into Patient	values ('629-49-6076',	'Toni Keller',		'A+',	'Low',		'9/24/2007',	'scotfl@me.com',	'TPNNEA5BY');
+insert into Patient	values ('496-84-2464',	'Tony Nguyen',		'O+',	'Not Urgent',	'12/31/2007',	'jbearp@me.com',	'HMCOU02AO');
+insert into Patient	values ('212-58-3294',	'Julie Hardy',		'A+',	'Low',		'4/22/2009',	'presoff@comcast.net',	'BXHEW9V0E');
+insert into Patient	values ('566-22-4168',	'Mandy Wise',		'O+',	'Not Urgent',	'8/18/2009',	'dawnsong@gmail.com',	'H7UXQYJLO');
+insert into Patient	values ('456-88-9853',	'Violet Thornton',	'B+',	'Not Urgent',	'5/6/2010',	'themer@gmail.com',	'L7KGB33WD');
+insert into Patient	values ('031-32-3897',	'Jay Davidson',		'A+',	'Not Urgent',	'10/14/2010',	'avalon@comcast.net',	'S2X0WOP5X');
+insert into Patient	values ('509-74-8307',	'Heather Gregory',	'O+',	'Low',		'5/13/2011',	'mrsam@msn.com',	'MX8P1DWO2');
+insert into Patient	values ('755-05-4700',	'Angelina Franklin',	'A+',	'High',		'2/22/2012',	'rmcfarla@msn.com',	'233WPE0TG');
+insert into Patient	values ('253-17-8946',	'Bradford Blake',	'AB+',	'Low',		'4/19/2013',	'tokuhirom@icloud.com',	'DQW6YMD52');
+insert into Patient	values ('159-60-8839',	'Frank Steele',		'A+',	'High',		'1/8/2014',	'kiddailey@mac.com',	'DB2KRWF1M');
+insert into Patient	values ('428-33-2129',	'William Brown',	'A+',	'High',		'5/9/2014',	'aibrahim@me.com',	'BI8G4ND4K');
+insert into Patient	values ('465-34-5190',	'Bridget Griffin',	'A+',	'Low',		'6/30/2014',	'bescoto@yahoo.com',	'PFTWQJ1PS');
+insert into Patient	values ('434-80-0890',	'Hattie Castro',	'A-',	'High',		'7/24/2014',	'kwilliams@live.com',	'OUQOX6IA3');
+insert into Patient	values ('065-74-5427',	'Nancy Ramos',		'A+',	'Low',		'11/13/2014',	'tamas@me.com',		'TXRZV0T06');
+insert into Patient	values ('519-16-0828',	'Wade Parker',		'O+',	'High',		'10/7/2015',	'damian@yahoo.com',	'UMJMUUZJD');
+insert into Patient	values ('518-67-6331',	'Regina Hayes',		'A+',	'High',		'7/20/2016',	'ovprit@icloud.com',	'DQ8CZWQBB');
+ 
+
+insert into Follow_up	values ('Blanche Hall is current and up to date with her immunizations',				'Failed',		'Unsuccessful',	'528-94-8057',	'Boston Childrens Hospital');
+insert into Follow_up	values ('Ian Glover has missed 1 immunization appointment',						'Passed',		'Successful',	'307-03-5688',	'Childrens Health Care of Atlanta at Egleston Hospital');
+insert into Follow_up	values ('Terry Meyer is current and up to date with her immunizations',					'Passed',		'Successful',	'534-62-1476',	'Childrens Hospital Colorado');
+insert into Follow_up	values ('Zachary Nash is current and up to date with his immunizations',				'Passed',		'Successful',	'366-36-1212',	'Childrens Hospital Medical Center of Akron');
+insert into Follow_up	values ('Toni Keller is current and up to date with her immunizations',					'Passed',		'Successful',	'629-49-6076',	'Driscoll Childrens Hospital');
+insert into Follow_up	values ('Tony Nguyen  is current and up to date with his immunizations',				'Passed',		'Successful',	'496-84-2464',	'Massachusetts General Hospital');
+insert into Follow_up	values ('Julie Hardy has not been seen for immunizations',						'Failed',		'Unsuccessful',	'212-58-3294',	'Nationwide Childrens Hospital');
+insert into Follow_up	values ('Mandy Wise has missed 2 follow up appointments for immunizations',				'Failed',		'Unsuccessful',	'566-22-4168',	'Rady Childrens Hospital');
+insert into Follow_up	values ('Violet Thornton has missed 1 follow up appointment, rescheduled to receive immunization',	'Failed',		'Unsuccessful',	'456-88-9853',	'Riley Hospital for Children at IU Health');
+insert into Follow_up	values ('Jay Davidson is current and up to date with his immunizations',				'Passed',		'Successful',	'031-32-3897',	'Texas Childrens Hospital');
+insert into Follow_up	values ('Heather Gregory is current and up to date with her immunizations',				'Passed',		'Successful',	'509-74-8307',	'The Childrens Hospital at Montefiore');
+insert into Follow_up	values ('Angelina Franklin has not received any immunizations',						'Failed',		'Unsuccessful',	'755-05-4700',	'UF Health Shands Childrens Hospital');
+insert into Follow_up	values ('Bradford Blake has missed 1 appointment for immunizations. No reschedule is planned.',		'Passed',		'Successful',	'253-17-8946',	'University Hospitals Cleveland Rainbow Babies Childrens');
+insert into Follow_up	values ('Frank Steele is current and up to date with his immunizations after 1 missed appointment',	'Passed',		'Successful',	'159-60-8839',	'University of Iowa Stead Family Childrens Hospital');
+insert into Follow_up	values ('William Brown has completed all immunizations necessary',					'Passed',		'Successful',	'428-33-2129',	'University of Louisville Norton Childrens Hospital');
+insert into Follow_up	values ('Bridget Griffin has not yet received immunizations, scheduling is pending.',			'Failed',		'Unsuccessful',	'465-34-5190',	'University of Michigan');
+insert into Follow_up	values ('Hattie Castro missed 1 immunization appointment',						'Passed',		'Successful',	'434-80-0890',	'University of Minnesota Masonic Childrens Hospital');
+insert into Follow_up	values ('Nancy Ramos missed 2 immunization appointments',						'Passed',		'Successful',	'065-74-5427',	'University of New Mexico Health Sciences Center');
+insert into Follow_up	values ('Wade Parker rescheduled 1 immunization appointment and is awaiting immunization',		'Failed',		'Unsuccessful',	'519-16-0828',	'University of Utah Clinical Trials Office');
+insert into Follow_up	values ('Regina Hayes is current and no longer requires immunization',					'Passed',		'Successful',	'518-67-6331',	'White Willow General Hospital');
+
